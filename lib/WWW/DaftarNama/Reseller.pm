@@ -46,7 +46,7 @@ my %args_ns = (
     ns4 => {schema => 'net::hostname*', req=>1},
 );
 
-my %args_info = (
+my %args_contact = (
     firstname => {schema => 'str*', req=>1},
     lastname => {schema => 'str*', req=>1},
     company => {schema => 'str*', req=>1},
@@ -156,7 +156,7 @@ $SPEC{register} = {
 
         periode => {schema => ['int*', between=>[1,10]]},
         %args_ns,
-        %args_info,
+        %args_contact,
     },
 };
 sub register {
@@ -201,15 +201,15 @@ sub renew {
     );
 }
 
-$SPEC{get_info} = {
+$SPEC{get_contact} = {
     v => 1.1,
-    summary => 'Get information for a domain',
+    summary => 'Get contact information for a domain',
     args => {
         %args_common,
         %arg0_domain,
     },
 };
-sub get_info {
+sub get_contact {
     my %args = @_;
     _request(
         action => 'whoisDomain',
@@ -217,23 +217,23 @@ sub get_info {
     );
 }
 
-$SPEC{update_info} = {
+$SPEC{update_contact} = {
     v => 1.1,
-    summary => 'Update information for a domain',
+    summary => 'Update contact information for a domain',
     args => {
         %args_common,
         %arg0_domain,
-        %args_info,
-    },
-};
-sub update_info {
-    my %args = @_;
-    _request(
-        action => 'updateWhois',
+        %args_contact,
         contacttype => {
             schema => ['str*', in=>[qw/all reg admin tech billing/]],
             req => 1,
         },
+    },
+};
+sub update_contact {
+    my %args = @_;
+    _request(
+        action => 'updateWhois',
         %args,
     );
 }

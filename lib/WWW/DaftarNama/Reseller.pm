@@ -29,18 +29,13 @@ my %args_common = (
         is_password => 1,
         tags => ['common', 'category:credential'],
     },
-    action => {
-        schema => 'str*',
-        req => 1,
-        pos => 0,
-    },
 );
 
-my %arg1_domain = (
+my %arg0_domain = (
     domain => {
         schema => 'domain::name*',
         req => 1,
-        pos => 1,
+        pos => 0,
     },
 );
 
@@ -91,7 +86,7 @@ $SPEC{get_ns} = {
     summary => 'Get nameservers for a domain',
     args => {
         %args_common,
-        %arg1_domain,
+        %arg0_domain,
     },
 };
 sub get_ns {
@@ -107,7 +102,7 @@ $SPEC{update_ns} = {
     summary => 'Update nameservers for a domain',
     args => {
         %args_common,
-        %arg1_domain,
+        %arg0_domain,
         %args_ns,
     },
 };
@@ -124,7 +119,7 @@ $SPEC{get_lock_status} = {
     summary => 'Get lock status for a domain',
     args => {
         %args_common,
-        %arg1_domain,
+        %arg0_domain,
     },
 };
 sub get_lock_status {
@@ -140,7 +135,7 @@ $SPEC{update_lock_status} = {
     summary => 'Update lock status for a domain',
     args => {
         %args_common,
-        %arg1_domain,
+        %arg0_domain,
         statusKey => {schema => 'str*', req=>1},
     },
 };
@@ -157,7 +152,7 @@ $SPEC{register} = {
     summary => 'Register a domain',
     args => {
         %args_common,
-        %arg1_domain,
+        %arg0_domain,
 
         periode => {schema => ['int*', between=>[1,10]]},
         %args_ns,
@@ -177,7 +172,7 @@ $SPEC{transfer} = {
     summary => 'Transfer a domain',
     args => {
         %args_common,
-        %arg1_domain,
+        %arg0_domain,
         eppCode => {schema => 'str*', req=>1},
     },
 };
@@ -194,7 +189,7 @@ $SPEC{renew} = {
     summary => 'Renew a domain',
     args => {
         %args_common,
-        %arg1_domain,
+        %arg0_domain,
         eppCode => {schema => 'str*', req=>1},
     },
 };
@@ -211,7 +206,7 @@ $SPEC{get_info} = {
     summary => 'Get information for a domain',
     args => {
         %args_common,
-        %arg1_domain,
+        %arg0_domain,
     },
 };
 sub get_info {
@@ -227,7 +222,7 @@ $SPEC{update_info} = {
     summary => 'Update information for a domain',
     args => {
         %args_common,
-        %arg1_domain,
+        %arg0_domain,
         %args_info,
     },
 };
@@ -235,6 +230,10 @@ sub update_info {
     my %args = @_;
     _request(
         action => 'updateWhois',
+        contacttype => {
+            schema => ['str*', in=>[qw/all reg admin tech billing/]],
+            req => 1,
+        },
         %args,
     );
 }
@@ -244,7 +243,7 @@ $SPEC{get_epp} = {
     summary => 'Get EPP Code for a domain',
     args => {
         %args_common,
-        %arg1_domain,
+        %arg0_domain,
     },
 };
 sub get_epp {
@@ -260,7 +259,7 @@ $SPEC{register_ns} = {
     summary => 'Register a nameserver',
     args => {
         %args_common,
-        %arg1_domain,
+        %arg0_domain,
         %arg_ns,
         ip => {schema => 'net::ipv4*', req=>1},
     },
@@ -278,7 +277,7 @@ $SPEC{delete_ns} = {
     summary => 'Delete a nameserver',
     args => {
         %args_common,
-        %arg1_domain,
+        %arg0_domain,
         %arg_ns,
     },
 };
@@ -295,7 +294,7 @@ $SPEC{get_registrar} = {
     summary => 'Get registrar of a domain',
     args => {
         %args_common,
-        %arg1_domain,
+        %arg0_domain,
     },
 };
 sub get_registrar {
@@ -311,7 +310,7 @@ $SPEC{check_availability} = {
     summary => 'Check the availability of a domain',
     args => {
         %args_common,
-        %arg1_domain,
+        %arg0_domain,
     },
 };
 sub check_availability {
